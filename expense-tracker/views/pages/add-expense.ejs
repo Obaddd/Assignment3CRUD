@@ -1,0 +1,22 @@
+<%- include('../partials/header') %>
+<h1>Add Expense</h1>
+<form action="/add" method="POST" class="mt-4">
+  <div class="mb-3">
+    <label for="date" class="form-label">Date</label>
+    <input type="date" class="form-control" id="date" name="date" required>
+  </div>
+  <div class="mb-3">
+    <label for="category" class="form-label">Category</label>
+    <input type="text" class="form-control" id="category" name="category" placeholder="e.g., Food, Travel, etc." required>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <input type="text" class="form-control" id="description" name="description" placeholder="Brief details about the expense" required>
+  </div>
+  <div class="mb-3">
+    <label for="amount" class="form-label">Amount</label>
+    <input type="number" step="0.01" class="form-control" id="amount" name="amount" placeholder="Enter the amount spent" required>
+  </div>
+  <button type="submit" class="btn btn-success">Add Expense</button>
+</form>
+<%- include('../partials/footer') %>

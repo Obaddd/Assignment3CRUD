@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+<h1>All Expenses</h1>
+
+<!-- Add this filter form -->
+<form method="GET" action="/" class="mb-3">
+  <div class="row">
+    <div class="col-md-3">
+      <input type="date" name="startDate" class="form-control" placeholder="Start Date">
+    </div>
+    <div class="col-md-3">
+      <input type="date" name="endDate" class="form-control" placeholder="End Date">
+    </div>
+    <div class="col-md-3">
+      <input type="text" name="category" class="form-control" placeholder="Category">
+    </div>
+    <div class="col-md-3">
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+  </div>
+</form>
+<!-- End filter form -->
+
+<!-- Existing table of expenses -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% expenses.forEach(expense => { %>
+      <tr>
+        <td><%= expense.date.toISOString().split('T')[0] %></td>
+        <td><%= expense.category %></td>
+        <td><%= expense.description %></td>
+        <td>$<%= expense.amount %></td>
+        <td>
+          <a href="/edit/<%= expense._id %>" class="btn btn-primary btn-sm">Edit</a>
+          <form action="/delete/<%= expense._id %>" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>
