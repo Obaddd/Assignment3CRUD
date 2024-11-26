@@ -1,43 +1,45 @@
 const express = require('express');
 const router = express.Router();
-const Expense = require('../models/expense'); // Import the model
+const Expense = require('../models/expense');
 const { Parser } = require('json2csv'); // Import json2csv
+const { requireAuth } = require('../middlewares/auth');
 
-// Home Page Route for both "/" and "/home"
-router.get(['/', '/home'], (req, res) => {
-  res.render('pages/home'); // Render the home.ejs file
+router.get(['/home', '/'], (req, res) => {
+  console.log('Rendering Home Page:', req.session);
+  res.render('pages/home', { username: req.session.username }); // Pass the username
+});
+
+// Add Expense Page Route (Protected)
+router.get('/add', requireAuth, (req, res) => {
+  res.render('pages/add-expense', { username: req.session.username }); // Pass username for display
 });
 
 // Get all expenses or filter by query parameters
 router.get('/expenses', async (req, res) => {
-  const { startDate, endDate, category } = req.query; // Extract filters from query params
+  const { startDate, endDate, category } = req.query;
   const filter = {};
-
-  // Add conditions to the filter object
   if (startDate) filter.date = { $gte: new Date(startDate) };
   if (endDate) filter.date = { ...filter.date, $lte: new Date(endDate) };
-  if (category) filter.category = new RegExp(category, 'i'); // Case-insensitive match
+  if (category) filter.category = new RegExp(category, 'i'); // Case-insensitive search
 
   try {
-    // Fetch expenses based on filters
-    const expenses = await Expense.find(filter);
-
-    // Calculate total expenses
-    const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-
-    // Calculate category breakdown
+    const expenses = await Expense.find(filter); // Fetch filtered expenses
+    const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0); // Calculate total
     const categoryBreakdown = expenses.reduce((breakdown, expense) => {
       breakdown[expense.category] = (breakdown[expense.category] || 0) + expense.amount;
       return breakdown;
     }, {});
 
-    // Pass data to the frontend
+    // Render the expenses page with the calculated data
     res.render('pages/list-expenses', { expenses, totalExpenses, categoryBreakdown });
   } catch (err) {
     console.error('Error fetching expenses:', err);
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+
 
 // Export expenses as CSV
 router.get('/expenses/export', async (req, res) => {
@@ -57,10 +59,6 @@ router.get('/expenses/export', async (req, res) => {
   }
 });
 
-// Adds a new expense (GET form)
-router.get('/add', (req, res) => {
-  res.render('pages/add-expense');
-});
 
 // Adds a new expense
 router.post('/add', async (req, res) => {
@@ -78,7 +76,7 @@ router.post('/add', async (req, res) => {
 router.get('/edit/:id', async (req, res) => {
   try {
     const expense = await Expense.findById(req.params.id);
-    res.render('pages/edit-expense', { expense });
+    res.render('pages/edit-expense', { expense, username: req.session.username }); // Pass username for display
   } catch (err) {
     res.status(500).send('Error fetching expense for editing');
   }

@@ -1,111 +1,114 @@
 <%- include('../partials/header') %>
-<h1>All Expenses</h1>
+<div class="container mt-4">
+  <h1 class="text-center mb-4">All Expenses</h1>
 
-<!-- Filter Form -->
-<form method="GET" action="/expenses" class="mb-3">
-  <div class="row">
-    <div class="col-md-3">
-      <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" name="startDate" class="form-control">
+  <!-- Filter Form -->
+  <form method="GET" action="/expenses" class="mb-4">
+    <div class="row">
+      <div class="col-md-3">
+        <label for="startDate" class="form-label">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label for="endDate" class="form-label">End Date:</label>
+        <input type="date" id="endDate" name="endDate" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label for="category" class="form-label">Category:</label>
+        <input type="text" id="category" name="category" class="form-control" placeholder="Category">
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+      </div>
     </div>
-    <div class="col-md-3">
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" name="endDate" class="form-control">
-    </div>
-    <div class="col-md-3">
-      <label for="category">Category:</label>
-      <input type="text" id="category" name="category" class="form-control" placeholder="Category">
-    </div>
-    <div class="col-md-3">
-      <label>&nbsp;</label> <!-- For alignment -->
-      <button type="submit" class="btn btn-primary form-control">Filter</button>
-    </div>
-  </div>
-</form>
+  </form>
 
-<!-- Learnt from Stackoverflow -->
-<!-- Analytics Section -->
-<div class="row mb-4">
-  <!-- Total Expenses Card -->
-  <div class="col-md-6">
-    <div class="card text-white bg-primary mb-3">
-      <div class="card-body">
-        <h4 class="card-title">Total Expenses</h4>
-        <h2 class="card-text">$<%= totalExpenses.toFixed(2) %></h2>
+  <!-- Analytics Section -->
+  <div class="row mb-4">
+    <!-- Total Expenses Card -->
+    <div class="col-md-6">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Expenses</h5>
+          <h3 class="card-text">$<%= totalExpenses.toFixed(2) %></h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Breakdown Card -->
+    <div class="col-md-6">
+      <div class="card text-dark bg-light mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Category Breakdown</h5>
+          <ul class="list-group">
+            <% Object.keys(categoryBreakdown).forEach(category => { %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <strong><%= category %></strong>
+                <span>$<%= categoryBreakdown[category].toFixed(2) %></span>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Category Breakdown Card -->
-  <div class="col-md-6">
-    <div class="card text-dark bg-light mb-3">
-      <div class="card-body">
-        <h4 class="card-title">Category Breakdown</h4>
-        <ul class="list-group">
-          <% Object.keys(categoryBreakdown).forEach(category => { %>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <strong><%= category %></strong>
-              <span>$<%= categoryBreakdown[category].toFixed(2) %></span>
-            </li>
-          <% }) %>
-        </ul>
+  <!-- Chart Section -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card p-3">
+        <h5 class="card-title text-center">Category Breakdown (Chart)</h5>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="categoryChart"></canvas>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  <!-- https://www.youtube.com/watch?v=RKJLR-Gky-M&ab_channel=CodingShiksha -->
+  <!-- CSV Export Button -->
+  <div class="mb-3 text-end">
+    <a href="/expenses/export" class="btn btn-success">Download CSV</a>
+  </div>
 
-<!-- Chart Section -->
-<div class="row mb-4">
-  <div class="col-md-12">
-    <h4>Category Breakdown (Chart)</h4>
-    <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
-      <canvas id="categoryChart"></canvas>
-    </div>
+  <!-- Table of Expenses -->
+  <div class="card">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% expenses.forEach(expense => { %>
+          <tr>
+            <td><%= expense.date.toISOString().split('T')[0] %></td>
+            <td><%= expense.category %></td>
+            <td><%= expense.description %></td>
+            <td>$<%= expense.amount %></td>
+            <td>
+              <a href="/edit/<%= expense._id %>" class="btn btn-primary btn-sm">Edit</a>
+              <form action="/delete/<%= expense._id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
   </div>
 </div>
-
-<!-- https://www.youtube.com/watch?v=RKJLR-Gky-M&ab_channel=CodingShiksha -->
-<!-- CSV Export Button -->
-<div class="mb-4 text-end">
-  <a href="/expenses/export" class="btn btn-success">Download CSV</a>
-</div>
-
-<!-- Table of Expenses -->
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Category</th>
-      <th>Description</th>
-      <th>Amount</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% expenses.forEach(expense => { %>
-      <tr>
-        <td><%= expense.date.toISOString().split('T')[0] %></td>
-        <td><%= expense.category %></td>
-        <td><%= expense.description %></td>
-        <td>$<%= expense.amount %></td>
-        <td>
-          <a href="/edit/<%= expense._id %>" class="btn btn-primary btn-sm">Edit</a>
-          <form action="/delete/<%= expense._id %>" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-          </form>
-        </td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
 
 <script>
   const ctx = document.getElementById('categoryChart').getContext('2d');
   const data = {
-    labels: <%- JSON.stringify(Object.keys(categoryBreakdown)) %>, // Categories as labels
+    labels: <%- JSON.stringify(Object.keys(categoryBreakdown)) %>,
     datasets: [{
       label: 'Expenses by Category',
-      data: <%- JSON.stringify(Object.values(categoryBreakdown)) %>, // Amounts as data
+      data: <%- JSON.stringify(Object.values(categoryBreakdown)) %>,
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -125,13 +128,12 @@
       borderWidth: 1
     }]
   };
-
   const config = {
-    type: 'bar', // Change to 'pie' for a pie chart
+    type: 'bar',
     data: data,
     options: {
-      responsive: true, // Ensures the chart is responsive
-      maintainAspectRatio: false, // Disable default aspect ratio
+      responsive: true,
+      maintainAspectRatio: false,
       scales: {
         y: {
           beginAtZero: true
@@ -139,7 +141,6 @@
       }
     }
   };
-
   new Chart(ctx, config);
 </script>
 

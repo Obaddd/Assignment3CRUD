@@ -1,11 +1,12 @@
 <%- include('../partials/header') %>
 
-<h1>Welcome to Expense Tracker</h1>
-<p class="text-center">Track your daily expenses and manage your finances effortlessly.</p>
-<p class="text-center">
-  <a href="/add" class="btn btn-success">Add Expense</a>
-  <a href="/expenses" class="btn btn-primary">View Expenses</a> <!-- Corrected the href -->
-</p>
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+  <h1 class="text-center mb-4">Welcome to Expense Tracker</h1>
+  <p class="text-center mb-4">Track your daily expenses and manage your finances effortlessly.</p>
+  <div>
+    <a href="/add" class="btn btn-success mx-2">Add Expense</a>
+    <a href="/expenses" class="btn btn-primary mx-2">View Expenses</a>
+  </div>
+</div>
 
 <%- include('../partials/footer') %>
-

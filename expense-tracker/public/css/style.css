@@ -1,15 +1,24 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 50px;
+  overflow-x: hidden;
 }
 
 body, html {
-  height: 100%;
-  margin: 0;
+  height: 100%; /* Full height */
+  margin: 0; /* Remove default margin */
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1; /* Push footer to the bottom */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
 }
 
 h1 {
@@ -28,7 +37,7 @@ form .form-label {
 }
 
 .table {
-  margin-bottom: 100px; /* Add extra spacing below the table */
+  margin-bottom: 50px; /* Add spacing below the table to prevent overlap with footer */
 }
 
 .navbar {
@@ -36,13 +45,12 @@ form .form-label {
 }
 
 footer {
-  background-color: #343a40;
-  color: white;
-  padding: 10px 0;
-  text-align: center;
+  background-color: #343a40; /* Dark background */
+  color: white; /* White text */
+  padding: 15px 20px; /* Padding for content */
   width: 100%;
-  position: relative;
-  bottom: 0;
+  margin-top: auto; /* Automatically push footer to the bottom */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 footer p {
