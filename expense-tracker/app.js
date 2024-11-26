@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Session Configuration
 app.use(
   session({
-    secret: 'your-secret-key', // Replace with a strong secret in production
+    secret: 'your-secret-key', 
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }), // Use MongoDB to store sessions

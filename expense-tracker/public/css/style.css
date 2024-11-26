@@ -8,17 +8,17 @@ body {
 }
 
 body, html {
-  height: 100%; /* Full height */
-  margin: 0; /* Remove default margin */
+  height: 100%; 
+  margin: 0; 
   display: flex;
   flex-direction: column;
 }
 
 main {
-  flex: 1; /* Push footer to the bottom */
+  flex: 1; 
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content vertically */
+  justify-content: center; 
 }
 
 h1 {
@@ -37,7 +37,7 @@ form .form-label {
 }
 
 .table {
-  margin-bottom: 50px; /* Add spacing below the table to prevent overlap with footer */
+  margin-bottom: 50px;
 }
 
 .navbar {
@@ -45,12 +45,12 @@ form .form-label {
 }
 
 footer {
-  background-color: #343a40; /* Dark background */
-  color: white; /* White text */
-  padding: 15px 20px; /* Padding for content */
+  background-color: #343a40; 
+  color: white; 
+  padding: 15px 20px; 
   width: 100%;
-  margin-top: auto; /* Automatically push footer to the bottom */
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin-top: auto; 
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 footer p {
@@ -76,8 +76,8 @@ footer p {
 }
 
 .chart-container {
-  max-width: 600px; /* Adjust the width as needed */
-  margin: 0 auto; /* Center the chart */
+  max-width: 600px; 
+  margin: 0 auto; 
 }
 
 canvas {
